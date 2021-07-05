@@ -13,11 +13,11 @@ class MatchList {
   }
 
   filter_by_time(from, to) {
-    return new MatchList(this.matches.filter(m => m.started > from && m.started < to));
+    return new MatchList(this.matches.filter(m => m.started >= from && m.started <= to));
   }
 
   filter_by_duration(from, to) {
-    return new MatchList(this.matches.filter(m => m.finished - m.started > from && m.finished - m.started < to));
+    return new MatchList(this.matches.filter(m => m.finished - m.started >= from && m.finished - m.started <= to));
   }
 
   filter_by_amount_of_players(amount) {
@@ -40,5 +40,9 @@ class MatchList {
 
   array() {
     return this.matches;
+  }
+
+  get length() {
+    return this.matches.length;
   }
 }

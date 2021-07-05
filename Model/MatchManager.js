@@ -24,7 +24,8 @@ class MatchManager {
         }
         matchArray.forEach(m => {
           m.profile_id = parseInt(playerId)
-          if (m.started < 1611680400) { /*before LotW - Burgundians inserted as 4, Sicilians as 29*/
+          m.started *= 1000;
+          if (m.started < 1611680400000) { /*before LotW - Burgundians inserted as 4, Sicilians as 29*/
             m.players.forEach(p => {
               if (p.civ >= 4) p.civ++;/*after Burg*/
               if (p.civ >= 29) p.civ++;/*after Sic*/
