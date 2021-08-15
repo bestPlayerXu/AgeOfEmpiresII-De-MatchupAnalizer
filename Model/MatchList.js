@@ -4,12 +4,12 @@ class MatchList {
   }
 
 /*creates new MatchList*/
-  filter_by_map(map) {
-    return new MatchList(this.matches.filter(m => m.map === map));
+  filter_by_map(maps) {
+    return new MatchList(this.matches.filter(m => map.find(mp => mp === m.map) >= 0));
   }
 
   filter_by_match_type(match_type) {
-    return new MatchList(this.matches.filter(m => match_type.find(r => r === m.rating_type)));
+    return new MatchList(this.matches.filter(m => match_type.find(r => r === m.leaderboard_id) >= 0));
   }
 
   filter_by_time(from, to) {
@@ -17,7 +17,7 @@ class MatchList {
   }
 
   filter_by_duration(from, to) {
-    return new MatchList(this.matches.filter(m => m.finished - m.started >= from && m.finished - m.started <= to));
+    return new MatchList(this.matches.filter(m => m.duration >= from && m.duration <= to));
   }
 
   filter_by_amount_of_players(amount) {

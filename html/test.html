@@ -9,6 +9,163 @@
   </body>
 </html>
 <style>
+	#civs .select_all_none {
+		opacity: 1;
+		transform: Scale(1);
+		width: 50px;
+		height: 50px;
+		margin: 5px;
+		display: inline-block;
+		transition: 0.3s;
+		cursor: pointer;
+	}
+	#civs .select_all_none:hover {
+		transform: Scale(1.2);
+	}
+	#civ_selection {
+		width: 90%;
+	}
+	#civs td:not(.arrow_td) {
+		width: 50%;
+		border-top: 2px solid black;
+    vertical-align: baseline;
+	}
+	.right_border {
+		border-right: 2px solid black;
+	}
+	.left_border {
+		border-left: 2px solid black;
+	}
+	#civs:not(.opened) td.civ_selection div:not(.selected) {
+		display: none;
+	}
+	#civs td.civ_selection div:not(.selected):not(.select_all_none) {
+		opacity: 0.7;
+		transform: Scale(0.7);
+	}
+	#civs td.civ_selection div:not(.selected):not(.select_all_none):hover {
+		opacity: 0.8;
+		transform: Scale(0.8);
+	}
+	#civs.opened td.civ_selection div.selected:not(.select_all_none):hover {
+		opacity: 0.9;
+		transform: Scale(0.9);
+	}
+	#civs img {
+		margin: 5px;
+	}
+	#civs td.civ_selection div:not(.select_all_none) {
+		display: inline-block;
+		width: fit-content;
+    height: fit-content;
+		transition: 0.3s;
+		cursor: pointer;
+    vertical-align: bottom;
+	}
+	#civ_selection table {
+		border-collapse: collapse;
+	}
+  .hidden {
+    display: none;
+  }
+  .show_hide_div {
+    padding: 10px 40px 10px 10px;
+    border: 2px solid black;
+    background-color: #eeeeee;
+    width: fit-content;
+  }
+  .close_options {
+    margin: 5px;
+  }
+  .close_options div {
+    cursor: pointer;
+    display: inline-block;
+    color: #333333;
+    font-size: 30px;
+  }
+  .close_options #show_or_hide div.not_seen {
+    opacity: 0;
+    width: 0px;
+  }
+  .close_options #show_or_hide div {
+    width: 0px;
+  }
+  .close_options #show_or_hide {
+    width: 4.5ch;
+    position: relative;
+  }
+  .arrow.opened {
+    transform: Rotate(90deg);
+  }
+	.arrow {
+		line-height: 0px;
+    width: fit-content;
+		cursor: pointer;
+	}
+	.arrow:not(.opened):hover {
+		transform: Rotate(25deg) Scale(1.2);
+	}
+	.arrow.opened:hover {
+		transform: Rotate(65deg) Scale(1.2);
+	}
+  #sample_info b {
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
+    font-weight: bold;
+    font-family: fantasy;
+  }
+  #game-modes button {
+    display: inline-block;
+    border: 2px solid black;
+    margin: 20px;
+    opacity: 0.5;
+    background-color: #aaa;
+    padding: 0px 5px 0px 5px;
+    text-align: center;
+    transition: 0.3s;
+    cursor: pointer;
+  }
+  #game-modes button:hover {
+    opacity: 0.75;
+    transform: Scale(1.05);
+  }
+  #game-modes button.selected:hover {
+    opacity: 0.9;
+  }
+  #game-modes button.selected {
+    opacity: 1;
+    transform: Scale(1.1);
+  }
+  .amount_of_matches {
+    width: 5ch;
+  }
+  .show_civ {
+    border: 2px solid black;
+    margin: 10px;
+    opacity: 0.5;
+    background-color: #aaa;
+    padding: 0px 5px 0px 5px;
+    text-align: center;
+    transition: 0.3s;
+    cursor: pointer;
+  }
+  #show_civ {
+    margin-bottom: 50px;
+  }
+  #sep {
+    display: inline-block;
+    transform: translate(0px, 25%);
+    text-align: center;
+  }
+  .sep {
+    display: inline-block;
+    margin: 10px;
+    cursore: pointer;
+  }
+  .show_civ.selected {
+    opacity: 1;
+    transform: Scale(1.1);
+  }
   #loading {
     position: fixed;
     bottom: calc(0% + 10px);
@@ -16,6 +173,7 @@
   }
   * {
     font-size: 40px;
+		transition: 0.5s;
   }
   body {
     background-color: #fff;
@@ -29,7 +187,6 @@
     width: 300px;
     background-color: #ccc;
     display: inline-table;
-    transition: 1s;
     -webkit-text-stroke-width: 2px;
     -webkit-text-stroke-color: black;
     font-weight: bold;
@@ -66,5 +223,15 @@
     position: relative;
     left: 50%;
     transform: translate(-50%, 0px);
+  }
+	.slider * {
+		transition: 0s;
+	}
+  #profile_id * {
+    margin: 0px 10px 0px 10px;
+  }
+  #profile_id input {
+    padding: 5px;
+    width: 10ch;
   }
 </style>

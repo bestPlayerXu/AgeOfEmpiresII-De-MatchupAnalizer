@@ -4,12 +4,12 @@ class MatchManager {
   constructor() {
   }
 
-  getMatchHistory(playerId) {
+  getMatchHistory(playerId, civ_strings) {
     this.player_id = playerId;
     return new Promise(resolve => {
       var fnFetchMatches = async (id, start, count) => {
         return new Promise(resolve => {
-          $.get('https://aoe2.net/api/player/matches?game=aoe2de&profile_id=' + playerId + '&count=' + count + '&start=' + start, data => resolve(JSON.parse(data), error => console.error(error)));
+          $.get('https://aoe2.net/api/player/matches?game=aoe2de&profile_id=' + playerId + '&count=' + count + '&start=' + start, data => resolve(JSON.parse(data)));
         });
       }
       (async () => {
@@ -20,17 +20,16 @@ class MatchManager {
           var matches = await fnFetchMatches(playerId, fetchedMatches, fetchMatchesPerFetch);
           if (matches.length < fetchMatchesPerFetch) finishedFetching = true;
           fetchedMatches += matches.length;
-          matchArray = matchArray.concat(matches);
-        }
+          matchArray = matchArray.concat(matches.filter(m => m.players.find(p => p.won) && m.players.length === 2)); //no result would count as loss; no tg
+				}
         matchArray.forEach(m => {
-          m.profile_id = parseInt(playerId)
-          m.started *= 1000;
-          if (m.started < 1611680400000) { /*before LotW - Burgundians inserted as 4, Sicilians as 29*/
-            m.players.forEach(p => {
-              if (p.civ >= 4) p.civ++;/*after Burg*/
-              if (p.civ >= 29) p.civ++;/*after Sic*/
-            });
-          }
+          m.profile_id = parseInt(playerId);
+          m.rating = m.players.find(p => parseInt(p.profile_id) === m.profile_id).rating;
+					if (m.started < 1420066800000) {
+						m.started *= 1000;
+						m.finished *= 1000;
+					}
+          m.duration = Math.abs((m.finished - m.started) * Math.round(10 + m.speed * 3.3) / 10 / 1000);
         });
         this.matchList = new MatchList(matchArray);
         resolve(this.matchList);
@@ -54,14 +53,10 @@ class MatchManager {
     }
     if (filter.civ) {
       if (filter.civ.opponent) {
-        if (filter.civ.opponent.length > 0) {
-          matchList = matchList.filter_by_opponent_civ(filter.civ.opponent);
-        }
+      	matchList = matchList.filter_by_opponent_civ(filter.civ.opponent);
       }
       if (filter.civ.self) {
-        if (filter.civ.self.length > 0) {
-          matchList = matchList.filter_by_self_civ(filter.civ.self);
-        }
+        matchList = matchList.filter_by_self_civ(filter.civ.self);
       }
     }
     if (filter.amount_of_players) {
